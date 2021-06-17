@@ -26,26 +26,7 @@ def find_model(name):
             except:
                 model = None
     return model_found, model
-
-
-def model_filter(name, model):
-    return True if model.lower() in name.lower() else False
-
-def find_model(name):
-    model = None
-    model_found = False
-    n = name.split()
-    for i in n:
-        for j in i:
-            try:
-                j = int(j)
-                model_found = True
-                model = i
-                return model_found, model
-            except:
-                model = None
-    return model_found, model
-
+    
 
 def model_filter(name, model):
     return True if model.lower() in name.lower() else False
@@ -58,7 +39,7 @@ def get_data():
         if data_dict['responseCode'] == 200:
             break
         else:
-    #         print('Data not available..')
+            print('Scraping Finished..')
             sleep(4)
     # For testing
  #   data_dict = {
@@ -110,6 +91,7 @@ def post_data(data_list, min_price, competition, comp_price, time, url, prd):
             "productUrl": data['url'],
             "sku": sku,
         }
+        
         # For API
         # while True:
         #     try:
@@ -126,40 +108,49 @@ def post_data(data_list, min_price, competition, comp_price, time, url, prd):
             upload = sub
             uploaded = True
         # For Manual
-#        print(f"{sub['productName']}\n user price: {sub['userPrice']}, min price: {sub['minPrice']}, comp price: {sub['competitionPrice']} actual price: {data['price']}\n")
+        #print(f"{sub['productName']}\n user price: {sub['userPrice']}, min price: {sub['minPrice']}, comp price: {sub['competitionPrice']} actual price: {data['price']}\n")
     print(f'\n\nuploaded data:-\n{upload}\n\n')
     sleep(5)
     return response
-
-
 def get_sku(url):
-    print(url)
-    browser = webdriver.Firefox()
-    # browser.minimize_window()
-    browser.get(url)
-    sku = 'NA'
+    sku = "SKU name not available"
     try:
         if 'binglee' in url:
+            print(url)
+            browser = webdriver.Firefox()
+            # browser.minimize_window()
+            browser.get(url)
+            sku = 'SKU name not available'
             try:
                 sku = browser.find_elements_by_css_selector('.product-highlight>li')[0].text.split(' ')[-1]
             except Exception as e:
                 n = e
+            browser.quit()
+        
         if 'officeworks' in url:
+            browser = webdriver.Firefox()
+            # browser.minimize_window()
+            browser.get(url)
+            sku = 'SKU name not available'
             try:
                 sku = browser.find_element_by_id('product-code').text
             except Exception as e:
                 n = e
+            browser.quit()
 
         if 'jbhifi' in url:
+            browser = webdriver.Firefox()
+            # browser.minimize_window()
+            browser.get(url)
+            sku = 'SKU name not available'
             try:
                 sku = browser.find_elements_by_css_selector('.product-meta.prod-code>dd')[1].text
             except Exception as e:
                 n = e
+            browser.quit()
 
     except Exception as e:
         n = e
-
-    browser.quit()
     return sku
 
 

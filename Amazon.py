@@ -71,7 +71,7 @@ def scrap(given_name: str, given_url, given_model_no=None):
                 title = clean_text(prd_data.html.find('#productTitle')[0].text)
             except IndexError:
                 continue
-
+            
             try:
                 table = prd_data.html.find('tr')
                 sku = ''
@@ -79,7 +79,7 @@ def scrap(given_name: str, given_url, given_model_no=None):
                     try:
                         th = row.text
                         if 'model' in th.lower() and 'number' in th.lower():
-                            sku = row.find('td')[0].text
+                            sku = row.find('td')[0].text.replace('\u200e', '')
                             break
                     except IndexError:
                         continue
@@ -114,6 +114,7 @@ def scrap(given_name: str, given_url, given_model_no=None):
             data_list.append(main)
         except AttributeError:
             print('Error 0005')
+            #print(sku)
 
     return data_list
 
